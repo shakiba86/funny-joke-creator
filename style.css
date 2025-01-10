@@ -1,0 +1,161 @@
+body {
+  font-family: "Comic Sans MS", "Comic Sans", cursive;
+  margin: 0;
+  padding: 0;
+  background-color: #fef5ff;
+  color: #333;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  box-sizing: border-box;
+  text-align: center;
+}
+
+.controls {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 30px;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+}
+.load-more-btn {
+  padding: 10px 20px;
+  font-size: 1rem;
+  color: #fff;
+  background-color: #df6990;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 20px;
+  transition: background-color 0.3s ease;
+}
+
+.load-more-btn:hover {
+  background-color: #ff80ab;
+}
+
+input {
+  padding: 10px;
+  font-size: 1.2rem;
+  border: 2px solid #f0af5f;
+  border-radius: 10px;
+  width: 300px;
+  max-width: 90%;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  background-color: #fff7e6;
+  transition: box-shadow 0.3s ease;
+}
+
+input:focus {
+  box-shadow: 0 6px 12px rgba(243, 160, 59, 0.5);
+  outline: none;
+}
+
+button {
+  padding: 10px 20px;
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #fff;
+  background-color: #df6990;
+  border: none;
+  border-radius: 50px;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.3s ease;
+}
+
+button:hover {
+  transform: rotate(-5deg) scale(1.1);
+  background-color: #ff80ab;
+  box-shadow: 0 8px 16px rgba(255, 64, 129, 0.3);
+}
+
+ul {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  width: 100%;
+  max-width: 700px;
+}
+
+ul li {
+  background-color: #e0f7fa;
+  border: 3px solid #00bcd4;
+  border-radius: 15px;
+  padding: 20px;
+  width: 100%;
+  box-shadow: 0 6px 12px rgba(0, 188, 212, 0.3);
+  text-align: center;
+  transform: scale(1);
+  position: relative;
+}
+
+ul li h2 {
+  margin: 0;
+  font-size: 1.5rem;
+  color: #00796b;
+}
+
+ul li p {
+  margin: 10px 0 0;
+  font-size: 1.2rem;
+  color: #004d40;
+}
+
+/* ul li::after {
+  content: "😂";
+  position: absolute;
+  top: -30px;
+  right: 10px;
+  font-size: 2rem;
+  opacity: 0;
+  animation: laughEmoji 5s ease-in-out forwards;
+} */
+
+ul li.with-emoji::after {
+  content: "😂";
+  position: absolute;
+  top: -30px;
+  right: 10px;
+  font-size: 2rem;
+  color: var(--emoji-color, orange);
+  opacity: 0;
+  animation: laughEmoji 5s ease-in-out;
+}
+
+ul li.no-emoji::after {
+  content: "";
+  animation: none;
+}
+
+@keyframes laughEmoji {
+  0% {
+    transform: scale(0.5) rotate(-10deg);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.5) rotate(10deg);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(0) rotate(-10deg);
+    opacity: 0;
+  }
+}
+
+@media (max-width: 768px) {
+  input {
+    font-size: 0.9rem;
+  }
+
+  button {
+    font-size: 1rem;
+    padding: 10px;
+  }
+}
