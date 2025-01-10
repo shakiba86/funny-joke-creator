@@ -44,7 +44,8 @@ async function fetchJoke(term) {
     fetchBtn.disabled = true;
 
     jokeList.innerHTML = "";
-    jokes = []; // Reset jokes array for new search
+    jokes = [];
+    currentPage = 1; // Reset jokes array for new search
 
     const headers = {
       Accept: "application/json",
