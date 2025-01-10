@@ -13,22 +13,19 @@ function renderJoke() {
   const startIndex = (currentPage - 1) * jokesPerPage;
   const endIndex = startIndex + jokesPerPage;
   const jokesToDisplay = jokes.slice(startIndex, endIndex);
-
-  // Render the current group of jokes
-  jokesToDisplay.forEach((joke) => {
-    const jokeItem = document.createElement("li");
-
-    // Add a class to conditionally disable the emoji for "No jokes found."
-    jokeItem.classList.add(
-      joke === "No jokes found." ? "no-emoji" : "with-emoji"
-    );
-
-    jokeItem.innerHTML = `
-      <h2>${joke === "No jokes found." ? "" : "Joke"}</h2>
-      <p>${joke}</p>
+  const jokeItems = jokesToDisplay
+    .map((joke) => {
+      const jokeClass = joke === "No jokes found." ? "no-emoji" : "with-emoji";
+      const jokeHeading = joke === "No jokes found." ? "" : "<h2>Joke</h2>";
+      return `
+      <li class="${jokeClass}">
+        ${jokeHeading}
+        <p>${joke}</p>
+      </li>
     `;
-    jokeList.appendChild(jokeItem);
-  });
+    })
+    .join("");
+  jokeList.innerHTML = jokeItems;
   if (endIndex < jokes.length) {
     const loadMoreBtn = document.createElement("button");
     loadMoreBtn.textContent = "Load More";
@@ -47,6 +44,7 @@ async function fetchJoke(term) {
     fetchBtn.disabled = true;
 
     jokeList.innerHTML = "";
+    jokes = []; // Reset jokes array for new search
 
     const headers = {
       Accept: "application/json",
