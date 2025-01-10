@@ -4,24 +4,41 @@ const fetchBtn = document.getElementById("fetchBtn");
 const userInput = document.getElementById("userInput");
 const jokeList = document.getElementById("jokeList");
 
-// function renderJoke(joke) {
-//   const jokeItem = document.createElement("li");
-//   jokeItem.innerHTML = `<h2>Joke</h2><p>${joke}</p>`;
-//   jokeList.appendChild(jokeItem);
-// }
-function renderJoke(joke) {
-  const jokeItem = document.createElement("li");
+let jokes = []; // Array to store jokes for pagination
+let jokesPerPage = 4;
+let currentPage = 1;
 
-  // Add a class to conditionally disable the emoji for "No jokes found."
-  jokeItem.classList.add(
-    joke === "No jokes found." ? "no-emoji" : "with-emoji"
-  );
+function renderJoke() {
+  jokeList.innerHTML = "";
+  const startIndex = (currentPage - 1) * jokesPerPage;
+  const endIndex = startIndex + jokesPerPage;
+  const jokesToDisplay = jokes.slice(startIndex, endIndex);
 
-  jokeItem.innerHTML = `
-    <h2>${joke === "No jokes found." ? "" : "Joke"}</h2>
-    <p>${joke}</p>
-  `;
-  jokeList.appendChild(jokeItem);
+  // Render the current group of jokes
+  jokesToDisplay.forEach((joke) => {
+    const jokeItem = document.createElement("li");
+
+    // Add a class to conditionally disable the emoji for "No jokes found."
+    jokeItem.classList.add(
+      joke === "No jokes found." ? "no-emoji" : "with-emoji"
+    );
+
+    jokeItem.innerHTML = `
+      <h2>${joke === "No jokes found." ? "" : "Joke"}</h2>
+      <p>${joke}</p>
+    `;
+    jokeList.appendChild(jokeItem);
+  });
+  if (endIndex < jokes.length) {
+    const loadMoreBtn = document.createElement("button");
+    loadMoreBtn.textContent = "Load More";
+    loadMoreBtn.classList.add("load-more-btn");
+    loadMoreBtn.addEventListener("click", () => {
+      currentPage++;
+      renderJoke();
+    });
+    jokeList.appendChild(loadMoreBtn);
+  }
 }
 
 async function fetchJoke(term) {
@@ -43,19 +60,15 @@ async function fetchJoke(term) {
     if (term) {
       const results = response.data.results || []; //If results is undefined or null it defaults to an empty array
       if (results.length === 0) {
-        //search returned no jokes for the given term
-        renderJoke("No jokes found.");
+        jokes = ["No jokes found."];
+        renderJoke();
         return;
       }
-      results.forEach(({ joke }) => renderJoke(joke));
-      return;
+      jokes = results.map(({ joke }) => joke);
+    } else if (response.data.joke) {
+      jokes = [response.data.joke];
     }
-    //When no joke is searched, a random joke will be displayed by default
-    if (response.data.joke) {
-      const { joke } = response.data;
-      renderJoke(joke);
-      return;
-    }
+    renderJoke();
   } catch (error) {
     //I want to catch the errors, but unfortunately this API does not support it
     jokeList.innerHTML = "<li>No response received!</li>";
