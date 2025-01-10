@@ -44,8 +44,9 @@ async function fetchJoke(term) {
     fetchBtn.disabled = true;
 
     jokeList.innerHTML = "";
-    jokes = [];
-    currentPage = 1; // Reset jokes array for new search
+    // jokes = [];
+    jokes.length = 0;
+    currentPage = 1;
 
     const headers = {
       Accept: "application/json",
@@ -58,14 +59,20 @@ async function fetchJoke(term) {
     console.log(response);
     if (term) {
       const results = response.data.results || []; //If results is undefined or null it defaults to an empty array
-      if (results.length === 0) {
-        jokes = ["No jokes found."];
-        renderJoke();
-        return;
-      }
-      jokes = results.map(({ joke }) => joke);
-    } else if (response.data.joke) {
-      jokes = [response.data.joke];
+      //   if (results.length === 0) {
+      //     jokes = ["No jokes found."];
+      //     renderJoke();
+      //     return;
+      //   }
+      //   jokes = results.map(({ joke }) => joke);
+      // } else if (response.data.joke) {
+      //   jokes = [response.data.joke];
+      // }
+      jokes = results.length
+        ? results.map(({ joke }) => joke)
+        : ["No jokes found."];
+    } else {
+      jokes.push(response.data.joke);
     }
     renderJoke();
   } catch (error) {
